@@ -65,6 +65,7 @@ struct sdshdr {
  * T = O(1)
  */
 static inline size_t sdslen(const sds s) {
+    //传入参数s为指向buf的指针，因此需要首先找到结构体开始的位置，然后才能通过结构体的开始位置获取到结构体中的len成员变量
     struct sdshdr *sh = (void*)(s-(sizeof(struct sdshdr)));
     return sh->len;
 }
