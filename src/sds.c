@@ -657,6 +657,10 @@ sds sdscatvprintf(sds s, const char *fmt, va_list ap) {
         va_copy(cpy,ap);
         // T = O(N)
         vsnprintf(buf, buflen, fmt, cpy);
+
+        //判断输出的格式化字符串是否把buf缓冲区填满
+        //如果填满(倒数第二个字符被改变),则扩大缓冲区空间,重新生成格式化字符写入缓冲区,直到成功将格式化字符存储到缓冲区
+        //使用启发式方法不断扩从缓冲区大小,直到满足需求
         if (buf[buflen-2] != '\0') {
             if (buf != staticbuf) zfree(buf);
             buflen *= 2;

@@ -66,6 +66,8 @@ struct sdshdr {
  */
 static inline size_t sdslen(const sds s) {
     //传入参数s为指向buf的指针，因此需要首先找到结构体开始的位置，然后才能通过结构体的开始位置获取到结构体中的len成员变量
+    //注意一个非常trick的地方sizeof(sdshdr)等于len和free所占的空间,buf是一个空数组,在进行内存分配前不占用任何的空间
+    //C99 introduced a means to define the "struct hack": it's now called "flexible array member" and before it is allocated memory, its size is 0.
     struct sdshdr *sh = (void*)(s-(sizeof(struct sdshdr)));
     return sh->len;
 }
