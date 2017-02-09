@@ -600,6 +600,8 @@ int dictReplace(dict *d, void *key, void *val)
      * as the previous one. In this context, think to reference counting,
      * you want to increment (set), and then decrement (free), and not the
      * reverse. */
+
+    //Attention:dictEntry都是作为一个整体zmalloc和zfree的
     // 先保存原有的值的指针
     auxentry = *entry;
     // 然后设置新的值
@@ -756,7 +758,8 @@ int _dictClear(dict *d, dictht *ht, void(callback)(void *)) {
     // T = O(N)
     for (i = 0; i < ht->size && ht->used > 0; i++) {
         dictEntry *he, *nextHe;
-
+        
+        //至多在i为0的时候调用一次callback函数
         if (callback && (i & 65535) == 0) callback(d->privdata);
 
         // 跳过空索引
@@ -1026,6 +1029,7 @@ void dictReleaseIterator(dictIterator *iter)
             iter->d->iterators--;
         // 释放不安全迭代器时，验证指纹是否有变化
         else
+            //判断在使用该iterator期间是否存在非法操作
             assert(iter->fingerprint == dictFingerprint(iter->d));
     }
     zfree(iter);
