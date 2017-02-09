@@ -756,7 +756,8 @@ int _dictClear(dict *d, dictht *ht, void(callback)(void *)) {
     // T = O(N)
     for (i = 0; i < ht->size && ht->used > 0; i++) {
         dictEntry *he, *nextHe;
-
+        
+        //至多在i为0的时候调用一次callback函数
         if (callback && (i & 65535) == 0) callback(d->privdata);
 
         // 跳过空索引
@@ -1026,6 +1027,7 @@ void dictReleaseIterator(dictIterator *iter)
             iter->d->iterators--;
         // 释放不安全迭代器时，验证指纹是否有变化
         else
+            //判断在使用该iterator期间是否存在非法操作
             assert(iter->fingerprint == dictFingerprint(iter->d));
     }
     zfree(iter);
