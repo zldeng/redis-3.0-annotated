@@ -600,6 +600,8 @@ int dictReplace(dict *d, void *key, void *val)
      * as the previous one. In this context, think to reference counting,
      * you want to increment (set), and then decrement (free), and not the
      * reverse. */
+
+    //Attention:dictEntry都是作为一个整体zmalloc和zfree的
     // 先保存原有的值的指针
     auxentry = *entry;
     // 然后设置新的值
