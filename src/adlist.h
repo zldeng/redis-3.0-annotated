@@ -76,7 +76,7 @@ typedef struct list {
     // 节点值复制函数
     void *(*dup)(void *ptr);
 
-    // 节点值释放函数
+    // 节点值释放函数,用于释放listNode结果中的value指针指向的内存
     void (*free)(void *ptr);
 
     // 节点值对比函数
